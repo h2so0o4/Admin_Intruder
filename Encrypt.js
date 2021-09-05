@@ -18,7 +18,7 @@ var Encrypt = {
     },
     nonceCreat: function(){
         var type = 0;
-        var deviceId = '80:fa:5b:55:37:1a';
+        var deviceId = 'f8:63:3f:86:fb:3c';
         var time = Math.floor(new Date().getTime() / 1000);
         var random = Math.floor(Math.random() * 10000);
         return [type, deviceId, time, random].join('_');
@@ -26,6 +26,20 @@ var Encrypt = {
     oldPwd : function(pwd){
         return CryptoJS.SHA1(this.nonce + CryptoJS.SHA1(pwd + this.key).toString()).toString();
     },
+    newPwd: function(pwd, newpwd){
+        var key = CryptoJS.SHA1(pwd + this.key).toString();
+        key = CryptoJS.enc.Hex.parse(key).toString();
+        key = key.substr(0, 32);
+        key = CryptoJS.enc.Hex.parse(key);
+        var password = CryptoJS.SHA1(newpwd + this.key).toString();
+        var iv = CryptoJS.enc.Hex.parse(this.iv);
+        var aes = CryptoJS.AES.encrypt(
+                password,
+                key,
+                {iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 }
+            ).toString();
+        return aes;
+    }
 };
 
 var CryptoJS = CryptoJS || function (u, p) {
