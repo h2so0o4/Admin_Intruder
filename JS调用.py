@@ -19,17 +19,16 @@ ctx = execjs.compile(jsstr)
 
 def creative_book():  # 创建密文密码字典
     f = open("top100PWD.txt")
+    h = open('adobe_top100_pass_creative.txt', 'w')
+    h1 = open('adobe_top100_pass_creative_random.txt', 'w')
     for line in f:
         r = line.strip('\n')
         utf = ctx.call('loginHandle', r)
-        h = open('adobe_top100_pass_creative.txt', 'a')
-        h1 = open('adobe_top100_pass_creative_random.txt', 'a')
-        h.write("\n" + utf[0])
-        h1.write("\n" + urllib.parse.quote(utf[1]))
+        h.write(utf[0] + "\n")
+        h1.write(urllib.parse.quote(utf[1]) + "\n")
         print(utf[0], urllib.parse.quote(utf[1]))
-        h.close()
-        h1.close()
     f.close()
-
+    h.close()
+    h1.close()
 
 creative_book()
